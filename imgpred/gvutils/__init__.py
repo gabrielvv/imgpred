@@ -9,10 +9,15 @@ import imutils
 from imutils import paths
 import cv2
 import os
+from functools import reduce
+
 from .clean_img import clean_img
 from .create_sets import create_sets
 from .plot_confusion_matrix import plot_confusion_matrix
 from .print_save_plot import print_save_plot
+from .list_to_file import list_to_file
+from .print_matrix import print_matrix, read_matrix
+
 
 def print_progress(i, slow_factor=0.1):
     sys.stdout.write('\r')
@@ -46,8 +51,8 @@ def imgs_stats(path, style="pie"):
     train_val = [len(train_val[0]), len(train_val[1])]
     test = [len(test[0]), len(test[1])]
 
-    ax[0].set_title('Train+Test1 Set')
-    ax[1].set_title('Test2 Set')
+    ax[0].set_title('Train+Test1 Set ({})'.format(reduce(lambda a,b:a+b, train_val)))
+    ax[1].set_title('Test2 Set ({})'.format(reduce(lambda a,b:a+b, test)))
 
     if style == "bar":
         ax[0].annotate(str(train_val[0]), (0, train_val[0]))

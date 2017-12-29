@@ -23,7 +23,7 @@ def print_save_plot(N, H, plot_path):
         # l'offset sera visuellement plus ou moins important
         h_offset = x + 1
         v_offset = y+(+0.05 if up_or_down == "up" else -0.05)
-        plt.annotate(prepend_text + str(y), xy=(x, y), xytext=(h_offset, v_offset),
+        plt.annotate(prepend_text + "\n" + str(y), xy=(x, y), xytext=(h_offset, v_offset),
             arrowprops=dict(facecolor='black', shrink=0.05),
         )
 
@@ -36,4 +36,4 @@ def print_save_plot(N, H, plot_path):
     plt.xlabel("Epoch #")
     plt.ylabel("Loss/Accuracy")
     plt.legend(loc="lower left")
-    plt.savefig(plot_path)
+    plt.savefig(plot_path, dpi=100)

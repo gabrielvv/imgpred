@@ -3,6 +3,8 @@ images
 .ipynb_checkpoints
 models
 reporting
+Tests.ipynb
+pima-indians-diabetes.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
