@@ -72,7 +72,7 @@ tensorboard --logdir="./logs"
 
 * Stats sur le dataset
 
-![img_stats](./data/viz/img_repartition_06.png)
+![img_stats](./data/viz/img_repartition.png)
 
 * Matrice de Confusion après test du classifieur (dataset test2)
 
@@ -80,8 +80,8 @@ tensorboard --logdir="./logs"
 
 * Tensorboard
 
-![tensorboard_scalar](./data/viz/tensorboard_scalar.png)
-![tensorboard_graph](./data/viz/tensorboard_graph.png)
+![tensorboard_scalar](./data/viz/tensorboard_scalar_.png)
+![tensorboard_graph](./data/viz/tensorboard_graph_.png)
 
 ## TO READ
 
