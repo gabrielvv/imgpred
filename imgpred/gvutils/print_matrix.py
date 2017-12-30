@@ -12,7 +12,7 @@ def print_matrix(plot_path, xlabel, ylabel, x, y, z):
 def read_matrix(file_path, plot_path, dataset_sizes, img_sizes):
     with open(file_path, "r") as file_out:
         data = json.loads(file_out.read())
-    print(data)
+    # print(data)
 
     accuracys = [h["val_acc"] for h in data]
     # for ds in dataset_sizes:
@@ -25,9 +25,9 @@ def read_matrix(file_path, plot_path, dataset_sizes, img_sizes):
     [500,1000,1500] => [500,500,500,1000,1000,1000,1500,1500,1500]
     """
     _dataset_sizes = []
-    _dataset_sizes = [_dataset_sizes + [size for i in range(len(img_sizes))] for size in dataset_sizes] 
+    _dataset_sizes = [_dataset_sizes + [size for i in range(len(img_sizes))] for size in dataset_sizes]
 
-    print(accuracys)
+    # print(accuracys)
 
     print_matrix(plot_path, "dataset size", "img size",
                     _dataset_sizes, list(img_sizes)*len(dataset_sizes), accuracys)
