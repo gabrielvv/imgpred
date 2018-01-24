@@ -41,7 +41,7 @@ def imgs_stats(path, style="pie"):
                 train_val[1].append(img_path)
             elif img_path.find("cat") >= 0:
                 train_val[0].append(img_path)
-        if img_path.find("test") >= 0:
+        if img_path.find("eval") >= 0:
             if img_path.find("not_cat") >= 0:
                 test[1].append(img_path)
             elif img_path.find("cat") >= 0:
@@ -51,8 +51,8 @@ def imgs_stats(path, style="pie"):
     train_val = [len(train_val[0]), len(train_val[1])]
     test = [len(test[0]), len(test[1])]
 
-    ax[0].set_title('Train+Test1 Set ({})'.format(reduce(lambda a,b:a+b, train_val)))
-    ax[1].set_title('Test2 Set ({})'.format(reduce(lambda a,b:a+b, test)))
+    ax[0].set_title('Train+Validation Set ({})'.format(reduce(lambda a,b:a+b, train_val)))
+    ax[1].set_title('Evaluation Set ({})'.format(reduce(lambda a,b:a+b, test)))
 
     if style == "bar":
         ax[0].annotate(str(train_val[0]), (0, train_val[0]))
