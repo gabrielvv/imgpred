@@ -14,7 +14,7 @@ def read_matrix(file_path, plot_path, dataset_sizes, img_sizes):
         data = json.loads(file_out.read())
     # print(data)
 
-    accuracys = [h["val_acc"] for h in data]
+    accuracys = [round(h["val_acc"],3) for h in data]
     # for ds in dataset_sizes:
     #     for imgs in img_sizes:
     #         for it in data:
@@ -26,7 +26,6 @@ def read_matrix(file_path, plot_path, dataset_sizes, img_sizes):
     """
     _dataset_sizes = []
     _dataset_sizes = [_dataset_sizes + [size for i in range(len(img_sizes))] for size in dataset_sizes]
-
     # print(accuracys)
 
     print_matrix(plot_path, "dataset size", "img size",

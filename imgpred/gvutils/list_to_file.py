@@ -1,7 +1,13 @@
 import json
+import os
 
-def list_to_file(filename, mlist, mode="w"):
-    with open(filename, mode) as file_in:
-        # for item in mlist:
-        #     file_in.write("%s\n" % item)
-        file_in.write(json.dumps(mlist))
+# https://stackoverflow.com/questions/12994442/appending-data-to-a-json-file-in-python
+def list_to_file(fname, mlist=[], mode="+"):
+    feeds = []
+    if os.path.isfile(fname):
+        with open(fname) as feedsjson:
+            feeds = json.load(feedsjson)
+    with open(fname, "w") as file_in:
+        for item in mlist:
+            feeds.append(item)
+        file_in.write(json.dumps(feeds))

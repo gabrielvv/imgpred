@@ -15,10 +15,10 @@ def create_sets(src_folder, dst_folder, size_limit=5000):
 
     # reset structure
     rmtree(os.path.sep.join([dst_folder, "train"]), ignore_errors=True)
-    rmtree(os.path.sep.join([dst_folder, "test2"]), ignore_errors=True)
-    os.mkdir(os.path.sep.join([dst_folder, "test2"]))
-    os.mkdir(os.path.sep.join([dst_folder, "test2", "cat"]))
-    os.mkdir(os.path.sep.join([dst_folder, "test2", "not_cat"]))
+    rmtree(os.path.sep.join([dst_folder, "eval"]), ignore_errors=True)
+    os.mkdir(os.path.sep.join([dst_folder, "eval"]))
+    os.mkdir(os.path.sep.join([dst_folder, "eval", "cat"]))
+    os.mkdir(os.path.sep.join([dst_folder, "eval", "not_cat"]))
     os.mkdir(os.path.sep.join([dst_folder, "train"]))
     os.mkdir(os.path.sep.join([dst_folder, "train", "cat"]))
     os.mkdir(os.path.sep.join([dst_folder, "train", "not_cat"]))
@@ -55,14 +55,14 @@ def create_sets(src_folder, dst_folder, size_limit=5000):
     not_cat_chunks = chunkify(not_cat, 10)
     cat_chunks = chunkify(cat, 10)
     train_set = flatten(not_cat_chunks[:9]) + flatten(cat_chunks[:9])
-    test2_set = flatten(not_cat_chunks[9:10]) + flatten(cat_chunks[9:10])
+    eval_set = flatten(not_cat_chunks[9:10]) + flatten(cat_chunks[9:10])
     for img_path in train_set:
         file = img_path.split(os.path.sep)[-1]
         label = img_path.split(os.path.sep)[-2]
         dst = os.path.sep.join([dst_folder, "train", label, file])
         copyfile(img_path, dst)
-    for img_path in test2_set:
+    for img_path in eval_set:
         file = img_path.split(os.path.sep)[-1]
         label = img_path.split(os.path.sep)[-2]
-        dst = os.path.sep.join([dst_folder, "test2", label, file])
+        dst = os.path.sep.join([dst_folder, "eval", label, file])
         copyfile(img_path, dst)

@@ -16,6 +16,19 @@ python imgpred/bulk_test_network.py -d images/test2 -m models/cat_not_cat_04.mod
 tensorboard --logdir="./logs"
 ```
 
+## Savoir si TF tourne sur CPU ou GPU
+```py
+import tensorflow as tf
+# Creates a graph.
+a = tf.constant([1.0, 2.0, 3.0, 4.0, 5.0, 6.0], shape=[2, 3], name='a')
+b = tf.constant([1.0, 2.0, 3.0, 4.0, 5.0, 6.0], shape=[3, 2], name='b')
+c = tf.matmul(a, b)
+# Creates a session with log_device_placement set to True.
+sess = tf.Session(config=tf.ConfigProto(log_device_placement=True))
+# Runs the op.
+print(sess.run(c))
+```
+
 ## Python
 * http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html
 * http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html#sklearn.model_selection.GridSearchCV
@@ -39,25 +52,36 @@ tensorboard --logdir="./logs"
 | Source | Total |
 | --------------| -----------|
 | [Caltech101](http://www.vision.caltech.edu/Image_Datasets/Caltech101/) | 9145 |
-| [inria](http://lear.inrialpes.fr/~jegou/data.php#holidays) | ?? |
 | [ukbench](https://archive.org/details/ukbench) | 2550 |
 | **total** | 11694 |
 
 ## Résultats
 
-| N°| Res | Training Set Size | Test Set Size | Accuracy | Divers |
+### LeNet
+
+| N°| Res | Training Set Size (cat/not_cat) | Test Set Size (cat/not_cat) | Accuracy (train/val/eval) | Divers |
 | --| ----| ------------------| --------------| ---------| -------|
-| 1 | 28 | 637/637* | 144/530| 0.66 ||
-| 2 | 28 | 637/626 | 144/530 | 0.75 ||
-| 3 | 28 | 637/626 | 144/530 | 0.77 | tensorflow gpu |
-| 4 | 64 | 637/626 | 144/530| 0.77 | tensorflow gpu |
-| 5 | 28 | 361/361 | 361/361| 0.79 ||
-| 6 | 28 | 2295/2295 | 255/255 | 0.87 ||
+| 1 | 28 | 637/637* | 144/530| \*/\*/0.66 | BS=25 EPOCHS=32 |
+| 2 | 28 | 637/626 | 144/530 | \*/\*/0.75 ||
+| 3 | 28 | 637/626 | 144/530 | \*/\*/0.77 | tensorflow gpu |
+| 4 | 64 | 637/626 | 144/530| \*/\*/0.77 | tensorflow gpu |
+| 5 | 28 | 361/361 | 361/361| \*/\*/0.79 ||
+| 6 | 28 | 2295/2295 | 255/255 | \*/\*/0.87 |_|
+| 7 | 28 | 4500/4500 | 500/500 | \*/0.864/0.88 | BS=25 EPOCHS=32 |
+| 8 | 28 | 1000/1000 | 500/500 | 0.90/0.825/0.83 | BS=50 EPOCHS=80 |
+| 9 | 28 | 4500/4500 | 500/500 | 0.92/0.86/0.88 | BS=50 EPOCHS=80 |
+| 10 | 28 | 500/500 | 500/500 | 0.88/0.78/0.84 | BS=50 EPOCHS=80 |
+| 11 | 28 | 500/500 | 500/500 | 0.888/0.808/0.83 | BS=50 EPOCHS=80 OPT='rmsprop' |
 
 \* *(avec séries de 4 images similaires)*
 
+### ConvNet
+
+| N°| Res | Training Set Size (cat/not_cat) | Test Set Size (cat/not_cat) | Accuracy (train/val/test) | Divers |
+| --| ----| ------------------| --------------| ---------| -------|
+| 1 | 150 | 500/500 | 500/500 | 0.86/0.80/0.83 | BS=16 EPOCHS=50 OPT='rmsprop' |
+
 ## VIZ
-<style>img {margin: auto; display: block;}</style>
 * Exemples d'images rapportées à la matrice de confusion
 
 ![confusion_matrix_samples](./data/viz/conf_matrix_samples.png)
@@ -90,32 +114,3 @@ tensorboard --logdir="./logs"
 * http://cs231n.github.io/neural-networks-3/
 * http://cs231n.github.io/understanding-cnn/
 * https://hackernoon.com/visualizing-parts-of-convolutional-neural-networks-using-keras-and-cats-5cc01b214e59
-
-## TODO
-
-* entrainement avec et sans **ImageGenerator**
-* Supprimer les images qui génèrent le message "iCCP: known incorrect RGB profile"
-* Tester test_network par batch de X images (au lieu de 1 à la fois) et évaluer rapidité d'exécution
-* OK → Comprendre l'architecture LeNet et les étapes de train_network -> faire des schémas
-* Ensembles
-  - Pour comparer des classifieurs on utilise l'ensemble **test1**
-  - par exemple pour comparer des classifieurs en faisant varier un paramètre du classifieur pour connaitre la meilleure valeur
-  - Pour évaluer le classifieur séléctionné on utilise l'ensembe **test2**
-* Utiliser d'avantage numpy, sklearn, pandas...
-* Packager l'ensemble pour obtenir un projet clés en main
-* Afficher les valeurs finales obtenues sur les graphes + max/min
-* Créer un fichier rapport exhaustif de chaque essai (train+test) + images de résultats
-* A quoi sert le **ImageDataGenerator** → image data preparation and augmentation?
-* Que représente **loss** → fonction d'évaluation du réseau lors de la phase d'entrainement -> binary cross entropy ?
-* Que représente **epoch** et **batch** ?
-    * **Batch**: a set of N samples. The samples in a batch are processed independently, in parallel. If training, a batch results in only one update to the model. The batch size in iterative gradient descent is the number of patterns shown to the network before the weights are updated. It is also an optimization in the training of the network, defining how many patterns to read at a time and keep in memory.
-    * **Epoch**: an arbitrary cutoff, generally defined as "one pass over the entire dataset", used to separate training into distinct phases, which is useful for logging and periodic evaluation. The number of epochs is the number of times that the entire training dataset is shown to the network during training.
-* Pourquoi LeNet ne se stabilise pas autour de la meilleure performance observée lors des itérations?
-* Expliquer:
-  * pourquoi la perf annoncée du classifieur après la phase d'entraînement peut différer de celle obtenue lors de la phase d'évaluation
-    * variété des images
-  * pourquoi avec les mêmes paramètres d'entrainement on obtient des classifieurs plus ou moins performants?
-    * différences dans les données d'entrainement
-* Comparer les résultats avec différentes tailles / réseaux
-* confronter à des images proches du chat (chiens, autres félins, "cougar_face" dans Object101 dataset)
-* Use a deeper network architecture during training.
